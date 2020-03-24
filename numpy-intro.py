@@ -1,0 +1,25 @@
+import numpy as np
+
+row = np.array([1, 2, 3])
+column = np.array([[1], [2], [3]])
+rwfi = np.arange(0, 30, 2)
+lins = np.linspace(0, 4, 9)
+id_matrix = np.eye(3)
+ones = np.ones((3, 2))
+zeroes = np.zeros((3, 2))
+
+m = np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]])
+
+print(row)
+print(column)
+print(rwfi)
+print(lins)
+print(id_matrix)
+print(ones)
+print(zeroes)
+print(m)
+print(m.reshape(12, 1))
+print(m.reshape(1, 12))
+print(m.reshape(2, 6))
+print(m.reshape(1, -1))
+print(m.T)
