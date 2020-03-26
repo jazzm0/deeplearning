@@ -28,10 +28,10 @@ model = keras.Sequential([
     keras.layers.Flatten(input_shape=(28, 28)),  # input
     keras.layers.Dense(128, activation='relu'),  # hidden
     keras.layers.Dense(128, activation='relu'),  # hidden
-    keras.layers.Dense(total_classes, activation='relu')  # output
+    keras.layers.Dense(total_classes, activation='sigmoid')  # output
 ])
 
-model.add(LeakyReLU(alpha=0.2))
+model.add(LeakyReLU(alpha=0.1))
 
 model.compile(
     optimizer='sgd',
