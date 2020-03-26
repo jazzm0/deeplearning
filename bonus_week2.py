@@ -1,5 +1,6 @@
 import keras
 from keras.datasets import fashion_mnist
+from keras.layers import LeakyReLU
 from deeplearning2020 import Submission
 
 # 0 	T-shirt/top
@@ -26,8 +27,11 @@ test_label_vectorized = keras.utils.to_categorical(test_label, total_classes)
 model = keras.Sequential([
     keras.layers.Flatten(input_shape=(28, 28)),  # input
     keras.layers.Dense(128, activation='relu'),  # hidden
-    keras.layers.Dense(total_classes, activation='sigmoid')  # output
+    keras.layers.Dense(128, activation='relu'),  # hidden
+    keras.layers.Dense(total_classes, activation='relu')  # output
 ])
+
+model.add(LeakyReLU(alpha=0.2))
 
 model.compile(
     optimizer='sgd',
@@ -35,9 +39,9 @@ model.compile(
     metrics=['accuracy']
 )
 
-model.fit(train_images, train_label_vectorized, epochs=30)
+model.fit(train_images, train_label_vectorized, epochs=40)
 
 eval_loss, eval_accuracy = model.evaluate(test_images, test_label_vectorized)
 print(eval_loss, eval_accuracy)
 
-# Submission('a70a2614a4468a25eb66a1113c846e31', '2', model).submit()
+Submission('a70a2614a4468a25eb66a1113c846e31', '2', model).submit()
