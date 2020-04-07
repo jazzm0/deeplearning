@@ -4,15 +4,25 @@ from deeplearning2020 import helpers
 from tensorflow.keras.layers import Dense, Input, Conv2D, MaxPooling2D, Flatten
 from tensorflow.keras.models import Model
 from tensorflow import keras
+from deeplearning2020.datasets import ImageWoof
+from deeplearning2020 import Submission
+
+
+# def preprocess(image, label):
+#     resized_image = tf.image.resize(image / 255, [300, 300])
+#     return resized_image, label
+#
+#
+# train_data = tfds.load('imagenette/320px', split=tfds.Split.TRAIN, as_supervised=True)
+# test_data = tfds.load('imagenette/320px', split=tfds.Split.VALIDATION, as_supervised=True)
 
 
 def preprocess(image, label):
-    resized_image = tf.image.resize(image / 255, [300, 300])
+    resized_image = tf.image.resize(image, [300, 300])
     return resized_image, label
 
 
-train_data = tfds.load('imagenette/320px', split=tfds.Split.TRAIN, as_supervised=True)
-test_data = tfds.load('imagenette/320px', split=tfds.Split.VALIDATION, as_supervised=True)
+train_data, test_data, classes = ImageWoof.load_data()
 
 n_classes = 10
 batch_size = 32
@@ -22,7 +32,8 @@ train_data = train_data.shuffle(1000)
 train_data = train_data.map(preprocess).batch(batch_size).prefetch(1)
 test_data = test_data.map(preprocess).batch(batch_size).prefetch(1)
 
-learning_rate = 0.001
+# learning_rate = 0.001
+learning_rate = 0.01
 momentum = 0.9
 dense_neurons = 1000
 n_filters = 512
@@ -64,17 +75,10 @@ CNN_model = Model(input_layer, output)
 
 # Kompilieren des Modells
 optimizer = keras.optimizers.SGD(lr=learning_rate, momentum=momentum)
-CNN_model.compile(
-    loss="sparse_categorical_crossentropy",
-    optimizer=optimizer,
-    metrics=["accuracy"]
-)
+CNN_model.compile(loss="sparse_categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
 CNN_model.summary()
 
-history2 = CNN_model.fit(
-    train_data,
-    epochs=12,
-    validation_data=test_data
-)
+history2 = CNN_model.fit(train_data, epochs=1, validation_data=test_data)
 
 helpers.plot_history('Accuracy zweites CNN', history2, 0)
+Submission('c1dc649d060fb05ca3486ec58b50fec2', '3', CNN_model).submit()
