@@ -37,6 +37,7 @@ learning_rate = 0.001
 momentum = 0.9
 dense_neurons = 1000
 n_filters = 512
+n_epochs=16
 
 activation = 'elu'
 
@@ -45,16 +46,16 @@ input_layer = Input(shape=(300, 300, 3))
 
 # Convolutional Neural Network
 # 6 Convolutional Layers mit jeweils einer Max Pooling Layer
-model = Conv2D(filters=256, kernel_size=(7, 7), activation=activation)(input_layer)
+model = Conv2D(filters=32, kernel_size=(7, 7), activation=activation)(input_layer)
+model = MaxPooling2D((2, 2))(model)
+
+model = Conv2D(filters=64, kernel_size=(3, 3), activation=activation)(model)
+model = MaxPooling2D((2, 2))(model)
+
+model = Conv2D(filters=128, kernel_size=(3, 3), activation=activation)(model)
 model = MaxPooling2D((2, 2))(model)
 
 model = Conv2D(filters=256, kernel_size=(3, 3), activation=activation)(model)
-model = MaxPooling2D((2, 2))(model)
-
-model = Conv2D(filters=n_filters, kernel_size=(3, 3), activation=activation)(model)
-model = MaxPooling2D((2, 2))(model)
-
-model = Conv2D(filters=n_filters, kernel_size=(3, 3), activation=activation)(model)
 model = MaxPooling2D((2, 2))(model)
 
 model = Conv2D(filters=n_filters, kernel_size=(3, 3), activation=activation)(model)
@@ -78,7 +79,7 @@ optimizer = keras.optimizers.SGD(lr=learning_rate, momentum=momentum)
 CNN_model.compile(loss="sparse_categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
 CNN_model.summary()
 
-history2 = CNN_model.fit(train_data, epochs=12, validation_data=test_data)
+history = CNN_model.fit(train_data, epochs=n_epochs, validation_data=test_data)
 
-helpers.plot_history('Accuracy zweites CNN', history2, 0)
-Submission('c1dc649d060fb05ca3486ec58b50fec2', '3', CNN_model).submit()
+helpers.plot_history('Accuracy zweites CNN', history, 0)
+# Submission('c1dc649d060fb05ca3486ec58b50fec2', '3', model).submit()
